@@ -1,0 +1,5 @@
+version: "3.8"
+services:
+  steam-web-pipes:
+    container_name: steam-web-pipes
+    image: ghcr.io/lifeismana/steam-web-pipes:latest
