@@ -7,6 +7,7 @@ on:
     branches: [ "master" ]
     # Publish semver tags as releases.
     paths:
+      - '.github/workflows/docker-build-steamwebpipes.yml'
       - 'SteamWebPipes/**'
   pull_request:
     branches: [ "master" ]
@@ -25,14 +26,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
-      # # Install the cosign tool except on PR
-      # # https://github.com/sigstore/cosign-installer
-      # - name: Install cosign
-      #   if: github.event_name != 'pull_request'
-      #   uses: sigstore/cosign-installer@v3.1.1
-      #   with:
-      #     cosign-release: 'v1.13.1'
 
       -
         name: Docker meta
