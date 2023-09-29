@@ -15,7 +15,7 @@ on:
 env:
   TITLE: Steam Web Pipes
   # github.repository as <account>/<repo>
-  GHCR_SLUG: lifeismana/steam-web-pipes
+  GHCR_SLUG: ghcr.io/lifeismana/steam-web-pipes
 
 jobs:
   build:
