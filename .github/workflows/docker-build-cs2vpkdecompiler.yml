@@ -1,10 +1,5 @@
 name: Build Docker image CS2 VPK Decompiler
 
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
 on:
   schedule:
     - cron: '0 5 * * *'
@@ -23,7 +18,7 @@ concurrency:
 env:
   TITLE: CS2 VPK Decompiler
   # github.repository as <account>/<repo>
-  IMAGE_NAME: ghcr.io/lifeismana/cs2-vpk-decompiler
+  GHCR_SLUG: ghcr.io/lifeismana/cs2-vpk-decompiler
 
 jobs:
   build:
@@ -70,4 +65,3 @@ jobs:
           tags: ${{ env.GHCR_SLUG }}:latest
           cache-from: ${{ env.GHCR_SLUG }}:latest
           labels: ${{ steps.meta.outputs.labels }}
-

@@ -12,6 +12,8 @@ on:
   pull_request:
     branches: [ "master" ]
 
+concurrency:
+  group: ${{ github.workflow }}
 env:
   TITLE: Steam Web Pipes
   # github.repository as <account>/<repo>
