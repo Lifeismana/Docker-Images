@@ -1,4 +1,4 @@
-name: Docker
+name: Build Docker image Steam Web Pipes
 
 on:
   schedule:
