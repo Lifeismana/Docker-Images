@@ -3,3 +3,5 @@ services:
   steam-web-pipes:
     container_name: steam-web-pipes
     image: ghcr.io/lifeismana/steam-web-pipes:latest
+    restart: unless-stopped
+    network_mode: host

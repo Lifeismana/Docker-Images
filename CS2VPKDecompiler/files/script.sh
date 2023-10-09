@@ -7,8 +7,6 @@ cd "${0%/*}"
 
 # if the env MANIFEST is not set we return an error
 [ -z "$GIT_URL" ] && echo "GIT_URL is missing" && exit 2
-# if the env GIT_URL is not set we return an error
-[ -z "$MANIFESTS" ] && echo "MANIFESTS is missing" && exit 2
 
 # if SSH_KEY is set to a non empty string save it in id_ed25519 if it doesn't exist
 [ -n "$SSH_KEY" ] && [ ! -f ~/.ssh/id_ed25519 ] && echo "$SSH_KEY" > ~/.ssh/id_ed25519
@@ -18,6 +16,8 @@ cd "${0%/*}"
 [ -n "$GPG_KEY_ID" ] && git config --global user.signingkey "$GPG_KEY_ID"
 [ -f ~/.ssh/id_ed25519 ] && chmod 600 ~/.ssh/id_ed25519
 [ -n "$KNOWN_HOSTS" ] && echo "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+DEPOT_LIST="2347770 2347771 2347779"
 
 ProcessVPK ()
 {
@@ -68,11 +68,11 @@ CreateCommit ()
 
 cd git_folder
 
-if [ ! -d "CS2VPKTracking" ]; then
-	git clone $GIT_URL
-	cd CS2VPKTracking
+if [ ! -d "cs2vpktracking" ]; then
+	git clone $GIT_URL cs2vpktracking
+	cd cs2vpktracking
 else
-	cd CS2VPKTracking
+	cd cs2vpktracking
 	git fetch
 	git reset --hard origin/master
 fi
@@ -84,19 +84,25 @@ find . -type d -empty -a -not -path './.git*' -delete
 
 echo "Downloading CS2"
 
-#idk why i have to do this in such a weird way but it works
+#if we don't have manifests, we use the latest manifest that steam provides us with
+#otherwise we use the manifests that we have
 
-depots=""
-manifests=""
-while IFS=' ' read -ra depot_manifest; do
-	for dm in "${depot_manifest[@]}"; do
-		IFS='_' read -ra dm_split <<< "$dm"
-		depots+="${dm_split[0]} "
-		manifests+="${dm_split[1]} "
-	done
-done <<< "$MANIFESTS"
-
-~/DepotDownloader/DepotDownloader -username "$STEAM_USERNAME" -password "$STEAM_PASSWORD" -app 730 -depot $depots -manifest $manifests -dir . -filelist "/data/vpk.txt" -validate
+if [ -z "$MANIFESTS" ]; then
+	~/DepotDownloader/DepotDownloader -username "$STEAM_USERNAME" -password "$STEAM_PASSWORD" -app 730 -depot $DEPOT_LIST -dir . -filelist "/data/vpk.txt" -validate
+else
+	#idk why i have to do this in such a weird way but it works
+	depots=""
+	manifests=""
+	while IFS=' ' read -ra depot_manifest; do
+		for dm in "${depot_manifest[@]}"; do
+			IFS='_' read -ra dm_split <<< "$dm"
+			depots+="${dm_split[0]} "
+			manifests+="${dm_split[1]} "
+		done
+	done <<< "$MANIFESTS"
+	
+	~/DepotDownloader/DepotDownloader -username "$STEAM_USERNAME" -password "$STEAM_PASSWORD" -app 730 -depot $depots -manifest $manifests -dir . -filelist "/data/vpk.txt" -validate
+fi
 
 echo "Processing CS2"
 
