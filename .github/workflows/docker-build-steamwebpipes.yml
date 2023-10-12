@@ -11,6 +11,9 @@ on:
       - 'SteamWebPipes/**'
   pull_request:
     branches: [ "master" ]
+    paths:
+      - '.github/workflows/docker-build-steamwebpipes.yml'
+      - 'SteamWebPipes/**'
 
 concurrency:
   group: ${{ github.workflow }}

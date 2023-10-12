@@ -11,6 +11,9 @@ on:
       - 'CS2VPKDecompiler/**'
   pull_request:
     branches: [ "master" ]
+    paths:
+      - '.github/workflows/docker-build-cs2vpkdecompiler.yml'
+      - 'CS2VPKDecompiler/**'
 
 concurrency:
   group: ${{ github.workflow }}
