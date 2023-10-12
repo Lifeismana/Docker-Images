@@ -1,0 +1,2 @@
+regex:.+?\.(so|sh)$
+regex:.+?_dir\.vpk$
