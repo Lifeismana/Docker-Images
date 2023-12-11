@@ -23,7 +23,7 @@ ProcessVPK ()
 
 		for ext in "vsvg_c,vxml_c,vcss_c,vjs_c,txt,vpost_c,vts_c,kv3,vpdi_c,csgoitem_c,econitem_c,vdata_c,res,lua,db,vrman_c,vsndstck_c,gameevents,vpulse_c,vsc,ini,nav,csv,css,cfg,vanmgrph_c,vpcf_c,vmap_c,vwrld_c,vsndevts_c"
 		do
-			~/Decompiler/Decompiler \
+			/data/Decompiler/Decompiler \
 				--input "$file" \
 				--output "$(echo "$file" | sed -e 's/\.vpk$/\//g')" \
 				--vpk_decompile \
@@ -76,7 +76,7 @@ echo "Downloading CS2"
 #
 
 if [ -z "$MANIFESTS" ]; then
-	~/DepotDownloader/DepotDownloader -app 730 -depot $DEPOT_LIST -dir . -filelist "/data/vpk.txt" -validate
+	/data/DepotDownloader/DepotDownloader -app 730 -depot $DEPOT_LIST -dir . -filelist "/data/vpk.txt" -validate
 else
 	#idk why i have to do this in such a weird way but it works
 	depots=""
@@ -89,7 +89,7 @@ else
 		done
 	done <<< "$MANIFESTS"
 	
-	~/DepotDownloader/DepotDownloader -app 730 -depot $depots -manifest $manifests -dir . -filelist "/data/vpk.txt" -validate
+	/data/DepotDownloader/DepotDownloader -app 730 -depot $depots -manifest $manifests -dir . -filelist "/data/vpk.txt" -validate
 fi
 
 echo "Processing CS2"
