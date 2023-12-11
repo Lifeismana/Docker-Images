@@ -52,7 +52,7 @@ CreateCommit ()
 	git add -A
 	
 	if ! git diff-index --quiet HEAD; then
-		git commit -S -a -m "$message"
+		git commit -a -m "$message"
 		git push
 	fi
 	

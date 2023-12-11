@@ -43,8 +43,6 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
 COPY --from=dotnet-8 /data/Decompiler /data/Decompiler/ 
 COPY --from=dotnet /data/DepotDownloader_export /data/DepotDownloader/DepotDownloader
 
-
-
 WORKDIR /data
 
 RUN useradd -m bot -d /data -u 1001 && chmod -R 755 /data && chown -R bot:bot /data
