@@ -34,7 +34,6 @@ RUN echo "BUILDARCH: $BUILDARCH" && \
 FROM base as main
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     gawk \
-    gnupg \
     php \
     php-common \
     php-mbstring \

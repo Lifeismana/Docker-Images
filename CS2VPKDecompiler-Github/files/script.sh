@@ -7,9 +7,6 @@ cd "${0%/*}"
 
 [ -n "$GIT_NAME" ] && git config --global user.name "$GIT_NAME"
 [ -n "$GIT_EMAIL" ] && git config --global user.email "$GIT_EMAIL"
-# probably unneeded
-#[ -n "$GPG_KEY" ] && gpg --batch --import <( echo "$GPG_KEY")
-#[ -n "$GPG_KEY_ID" ] && git config --global user.signingkey "$GPG_KEY_ID"
 
 DEPOT_LIST="2347770"
 
@@ -45,10 +42,6 @@ FixUCS2 ()
 CreateCommit ()
 {
 	message="$1 | $(git status --porcelain | wc -l) files | $(git status --porcelain | sed '{:q;N;s/\n/, /g;t q}' | sed 's/^ *//g' | cut -c 1-1024)"
-	if [ -n "$2" ]; then
-		bashpls=$'\n\n'
-		message="${message}${bashpls}https://steamdb.info/patchnotes/$2/"
-	fi
 	git add -A
 	
 	if ! git diff-index --quiet HEAD; then
@@ -58,8 +51,6 @@ CreateCommit ()
 	
 	#~/ValveProtobufs/update.sh
 }
-
-echo "repo is located at:$GITHUB_WORKSPACE"
 
 cd $GITHUB_WORKSPACE
 
@@ -72,8 +63,6 @@ echo "Downloading CS2"
 
 #if we don't have manifests, we use the latest manifest that steam provides us with
 #otherwise we use the manifests that we have
-
-#
 
 if [ -z "$MANIFESTS" ]; then
 	/data/DepotDownloader/DepotDownloader -app 730 -depot $DEPOT_LIST -dir . -filelist "/data/vpk.txt" -validate
@@ -98,4 +87,4 @@ ProcessVPK
 
 FixUCS2
 
-CreateCommit "$(grep "ClientVersion=" game/csgo/steam.inf | grep -o '[0-9\.]*')" "$1"
+CreateCommit "$(grep "ClientVersion=" game/csgo/steam.inf | grep -o '[0-9\.]*')"
