@@ -66,7 +66,7 @@ cd $GITHUB_WORKSPACE
 echo "Cleaning CS2"
 
 find . -type f -not \( -path './README.md' -o -path './.git*' -o -path '*.vpk' -o -path "steam.inf" -o -path "./.DepotDownloader" \) -delete 
-find . -type d -empty -a -not -path './.git*' -delete
+find . -type d -empty -a -not \( -path './.git*' -o -path "./.DepotDownloader" \) -delete
 
 echo "Downloading CS2"
 
