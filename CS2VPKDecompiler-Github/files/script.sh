@@ -59,7 +59,7 @@ CreateCommit ()
 	#~/ValveProtobufs/update.sh
 }
 
-echo "repo is located at:${$GITHUB_WORKSPACE}"
+echo "repo is located at:$GITHUB_WORKSPACE"
 
 cd $GITHUB_WORKSPACE
 
