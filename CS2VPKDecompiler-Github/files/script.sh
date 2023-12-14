@@ -18,7 +18,7 @@ ProcessVPK ()
 	do
 		echo " > $file"
 
-		for ext in "vsvg_c,vxml_c,vcss_c,vjs_c,txt,vpost_c,vts_c,kv3,vpdi_c,csgoitem_c,econitem_c,vdata_c,res,lua,db,vrman_c,vsndstck_c,gameevents,vpulse_c,vsc,ini,nav,csv,css,cfg,vanmgrph_c,vpcf_c,vmap_c,vwrld_c,vsndevts_c"
+		for ext in "vsvg_c,vpost_c,vpdi_c,csgoitem_c,econitem_c,vdata_c,res,vrman_c,vsc,ini,nav,csv,css,cfg,vanmgrph_c,vpcf_c,vmap_c,vwrld_c"
 		do
 			/data/Decompiler/Decompiler \
 				--input "$file" \
