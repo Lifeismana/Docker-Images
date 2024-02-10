@@ -12,7 +12,7 @@ RUN git clone https://github.com/xPaw/elf-strings && \
     go get github.com/ianlancetaylor/demangle && \
     go build -o elf-strings
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS dotnet
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS dotnet-8
 ARG BUILDARCH
 # https://stackoverflow.com/questions/70369368/check-architecture-in-dockerfile-to-get-amd-arm
 RUN echo "BUILDARCH: $BUILDARCH" && \
@@ -28,13 +28,20 @@ RUN echo "BUILDARCH: $BUILDARCH" && \
     git clone https://github.com/SteamRE/SteamKit.git && \
     cd SteamKit && \
     dotnet build -c Release Resources/ProtobufDumper/ProtobufDumper/ProtobufDumper.csproj && \
-    dotnet publish --configuration Release -p:PublishSingleFile=true -p:DebugType=embedded --self-contained --runtime linux-x64  Resources/ProtobufDumper/ProtobufDumper/ProtobufDumper.csproj && \
+    dotnet publish --configuration Release -p:PublishSingleFile=true -p:DebugType=embedded --self-contained --runtime linux-x64  Resources/ProtobufDumper/ProtobufDumper/ProtobufDumper.csproj
+
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS dotnet
+ARG BUILDARCH
+# https://stackoverflow.com/questions/70369368/check-architecture-in-dockerfile-to-get-amd-arm
+RUN echo "BUILDARCH: $BUILDARCH" && \
+    ARCH=$(echo $BUILDARCH | sed s/amd64/x64/) && \ 
+    mkdir /data && \
     cd /data && \
     git clone --depth=1 https://github.com/SteamRE/DepotDownloader.git && \
     cd DepotDownloader && \
     dotnet build -c Release ./DepotDownloader/DepotDownloader.csproj && \
     dotnet publish --configuration Release -p:PublishSingleFile=true -p:PublishTrimmed=True -p:DebugType=embedded --self-contained --runtime linux-${ARCH} DepotDownloader/DepotDownloader.csproj && \
-    mv ./DepotDownloader/bin/Release/net8.0/linux-${ARCH}/publish/DepotDownloader /data/DepotDownloader_export
+    mv ./DepotDownloader/bin/Release/net6.0/linux-${ARCH}/publish/DepotDownloader /data/DepotDownloader_export
 
 
 FROM base AS download
@@ -63,8 +70,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
 # we're missing nm-with-macho so .dylib files won't work
 
 COPY --from=go /go/elf-strings/elf-strings /data/elfstrings/elfstrings
-COPY --from=dotnet /data/SteamKit/Resources/ProtobufDumper/ProtobufDumper/bin/Release/linux-x64/publish/ /data/ProtobufDumper
-COPY --from=dotnet /data/Decompiler /data/ValveResourceFormat/Decompiler/bin/Release/linux-x64/publish/ 
+COPY --from=dotnet-8 /data/SteamKit/Resources/ProtobufDumper/ProtobufDumper/bin/Release/linux-x64/publish/ /data/ProtobufDumper
+COPY --from=dotnet-8 /data/Decompiler /data/ValveResourceFormat/Decompiler/bin/Release/linux-x64/publish/ 
 COPY --from=download /data/VPKTool/vpktool /data/VPKTool/vpktool
 COPY --from=dotnet /data/DepotDownloader_export /data/DepotDownloader/DepotDownloader
 COPY list /data/list
