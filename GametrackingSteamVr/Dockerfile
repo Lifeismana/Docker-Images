@@ -37,8 +37,9 @@ RUN echo "BUILDARCH: $BUILDARCH" && \
     ARCH=$(echo $BUILDARCH | sed s/amd64/x64/) && \ 
     mkdir /data && \
     cd /data && \
-    git clone --depth=1 https://github.com/SteamRE/DepotDownloader.git && \
+    git clone https://github.com/SteamRE/DepotDownloader.git && \
     cd DepotDownloader && \
+    git checkout 4c52ad3a4c608612c28fd186884815fad103694d && \
     dotnet build -c Release ./DepotDownloader/DepotDownloader.csproj && \
     dotnet publish --configuration Release -p:PublishSingleFile=true -p:PublishTrimmed=True -p:DebugType=embedded --self-contained --runtime linux-${ARCH} DepotDownloader/DepotDownloader.csproj && \
     mv ./DepotDownloader/bin/Release/net6.0/linux-${ARCH}/publish/DepotDownloader /data/DepotDownloader_export
