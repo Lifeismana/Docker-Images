@@ -5,7 +5,7 @@ RUN echo '\nAcquire::Retries "100";\nAcquire::https::Timeout "240";\nAcquire::ht
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-FROM golang:1.20 AS go
+FROM golang:1.22 AS go
 RUN git clone https://github.com/xPaw/elf-strings && \
     cd elf-strings && \
     go mod init elf-strings && \
