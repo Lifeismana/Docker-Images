@@ -1,4 +1,4 @@
-name: Build Docker image CS2 VPK Decompiler
+name: Build Docker image CS2 VPK Decompiler - Github Version
 
 on:
   schedule:
