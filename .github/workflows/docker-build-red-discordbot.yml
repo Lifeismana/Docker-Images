@@ -1,0 +1,72 @@
+name: build
+
+on:
+  schedule:
+    - cron: '0 5 * * 1'
+  push:
+    branches:
+      - master
+    paths:
+      - Red-DiscordBot/Dockerfile
+      - .github/workflows/docker-build-red-discordbot.yml
+  workflow_dispatch:
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    env:
+      TITLE: Red-DiscordBot
+      GHCR_SLUG: ghcr.io/lifeismana/docker-red-discordbot
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v4.1.1
+      -
+        name: Repo metadata
+        id: repo
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const repo = await github.rest.repos.get(context.repo)
+            return repo.data
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v3.0.0
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3.2.0
+      -
+        name: Login to GitHub Container Registry
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3.0.0 
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      -
+        name: Build and push latest
+        uses: docker/build-push-action@v5.0.0
+        with:
+          context: "{{defaultContext}}:Red-DiscordBot"
+          target: latest
+          platforms: |
+            linux/amd64
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: |
+            ${{ env.GHCR_SLUG }}:latest          
+            ${{ env.GHCR_SLUG }}:full
+          cache-from: |
+            ${{ env.GHCR_SLUG }}:full
+      -
+        name: Check manifest
+        if: github.event_name != 'pull_request'
+        run: |
+          docker buildx imagetools inspect ${{ env.GHCR_SLUG }}:full
+      -
+        name: Check pull
+        if: github.event_name != 'pull_request'
+        run: |
+          docker pull ${{ env.GHCR_SLUG }}:full
+          docker image inspect ${{ env.GHCR_SLUG }}:full
