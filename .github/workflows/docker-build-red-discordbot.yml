@@ -9,6 +9,12 @@ on:
     paths:
       - Red-DiscordBot/Dockerfile
       - .github/workflows/docker-build-red-discordbot.yml
+  pull_request:
+    branches: 
+      - master
+    paths:
+      - .github/workflows/docker-build-red-discordbot.yml
+      - 'Red-DiscordBot/Dockerfile'
   workflow_dispatch:
 
 jobs:
