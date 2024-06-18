@@ -72,18 +72,10 @@ COPY --chmod=755 script.sh /data/
 
 WORKDIR /data
 
-RUN useradd -m bot -d /data && chmod -R 755 /data && mkdir -p /data/.ssh && chmod 700 /data/.ssh && chown -R bot:bot /data
-
-# I'll have to change this later
+RUN useradd -m bot -d /data -u 1001 && chmod -R 755 /data && chown -R bot:bot /data
 USER bot
-RUN echo "|1|w1kVfoaNj+U3IraxC4lmklK2VWI=|Xbgg3EypjZkJ/NWTxDCQIpe42rw= ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl" >> /data/.ssh/known_hosts && \ 
-echo ".DepotDownloader" >> /data/.gitignore && \
-git config --global core.excludesfile ~/.gitignore && \
-mkdir -p /data/.local/share/IsolatedStorage && \
-mkdir -p /data/git_folder && \
-mkdir -p /data/ValveProtobufs && \
+
+RUN mkdir -p /data/ValveProtobufs && \
 echo "#!/bin/bash\necho \"HELLO I'M A GHOST \"" >> /data/ValveProtobufs/update.sh && \
-chmod -R 755 /data/ValveProtobufs && \
-chmod -R 755 /data/git_folder && \
-chmod -R 755 /data/.local/share/IsolatedStorage
-CMD [ "./script.sh" ]
+chmod -R 755 /data/ValveProtobufs
+CMD [ "/data/script.sh" ]
