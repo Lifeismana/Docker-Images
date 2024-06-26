@@ -28,7 +28,10 @@ cd $GITHUB_WORKSPACE
 
 cd steamvr
 
+mkdir -p ./driver
+
 # dotnet /data/DepotDownloader/DepotDownloader.dll
+/data/DepotDownloader/DepotDownloader -username "$STEAM_USERNAME" -password "$STEAM_PASSWORD" -app 250820 -all-platforms -dir ./driver -beta beta -manifest-only
 /data/DepotDownloader/DepotDownloader -username "$STEAM_USERNAME" -password "$STEAM_PASSWORD" -app 250820 -all-platforms -depot 250821 -validate -dir . -beta beta -filelist "/data/list/dll.txt"
 /data/DepotDownloader/DepotDownloader -username "$STEAM_USERNAME" -password "$STEAM_PASSWORD" -app 250820 -all-platforms -depot 250823 250832 -validate -dir . -beta beta -filelist "/data/list/lib.txt"
 /data/DepotDownloader/DepotDownloader -username "$STEAM_USERNAME" -password "$STEAM_PASSWORD" -app 250820 -all-platforms -depot 250824 -validate -dir . -beta beta -filelist "/data/list/big_content.txt"
