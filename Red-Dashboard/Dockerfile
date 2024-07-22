@@ -1,4 +1,4 @@
-FROM python:3.8-slim as latest
+FROM python:3.12-slim as latest
 RUN set -eux; \
 # Install Red-DiscordBot dependencies
     apt-get update; \
