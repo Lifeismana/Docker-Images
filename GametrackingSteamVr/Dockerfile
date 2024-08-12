@@ -5,53 +5,30 @@ RUN echo '\nAcquire::Retries "100";\nAcquire::https::Timeout "240";\nAcquire::ht
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-FROM golang:1.22 AS go
-RUN git clone https://github.com/xPaw/elf-strings && \
-    cd elf-strings && \
-    go mod init elf-strings && \
-    go get github.com/ianlancetaylor/demangle && \
-    go build -o elf-strings
-
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS dotnet
-ARG BUILDARCH
-# https://stackoverflow.com/questions/70369368/check-architecture-in-dockerfile-to-get-amd-arm
-RUN echo "BUILDARCH: $BUILDARCH" && \
-    ARCH=$(echo $BUILDARCH | sed s/amd64/x64/) && \ 
+FROM base AS builder
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    build-essential \
+    wget \
+    golang-go && \
+    wget https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
+    dpkg -i packages-microsoft-prod.deb && \
+    apt-get update && \
+    apt-get install -y dotnet-sdk-8.0 && \
     mkdir /data && \
     cd /data && \
-    git clone --depth=1 https://github.com/SteamDatabase/ValveResourceFormat.git && \
-    cd ValveResourceFormat && \
-    dotnet build -c Release ./Decompiler/Decompiler.csproj && \
-    dotnet publish --configuration Release -p:PublishSingleFile=true -p:DebugType=embedded --self-contained --runtime linux-${ARCH} Decompiler/Decompiler.csproj && \
-    mv ./Decompiler/bin/Release/linux-${ARCH}/publish /data/Decompiler && \
-    cd /data && \
-    git clone https://github.com/SteamRE/SteamKit.git && \
-    cd SteamKit && \
-    dotnet build -c Release Resources/ProtobufDumper/ProtobufDumper/ProtobufDumper.csproj && \
-    dotnet publish --configuration Release -p:PublishSingleFile=true -p:DebugType=embedded --self-contained --runtime linux-x64  Resources/ProtobufDumper/ProtobufDumper/ProtobufDumper.csproj && \
+    git clone --depth=1 --recurse-submodules https://github.com/SteamDatabase/GameTracking.git && \
+    cd GameTracking && \
+    ./build.sh && \
     cd /data && \
     git clone --depth=1 https://github.com/SteamRE/DepotDownloader.git && \
     cd DepotDownloader && \
     dotnet build -c Release ./DepotDownloader/DepotDownloader.csproj && \
-    dotnet publish --configuration Release -p:PublishSingleFile=true -p:DebugType=embedded --self-contained --runtime linux-${ARCH} DepotDownloader/DepotDownloader.csproj && \
-    mv ./DepotDownloader/bin/Release/net8.0/linux-${ARCH}/publish/DepotDownloader /data/DepotDownloader_export
+    dotnet publish --configuration Release -p:PublishSingleFile=true -p:DebugType=embedded --self-contained --runtime linux-x64 DepotDownloader/DepotDownloader.csproj && \
+    mv ./DepotDownloader/bin/Release/net8.0/linux-x64/publish/DepotDownloader /data/DepotDownloader_export
 
-
-FROM base AS download
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN mkdir /data && \
-    cd /data && \
-    git clone https://github.com/Penguinwizzard/VPKTool.git && \
-    cd VPKTool && \
-    make
-
-FROM base as main
+FROM base AS main
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     gnupg \
-    binutils \
     nodejs \
     npm \
     php \
@@ -60,13 +37,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     openssh-client \
     && rm -rf /var/lib/apt/lists/*
 
-# we're missing nm-with-macho so .dylib files won't work
-
-COPY --from=go /go/elf-strings/elf-strings /data/elfstrings/elfstrings
-COPY --from=dotnet /data/SteamKit/Resources/ProtobufDumper/ProtobufDumper/bin/Release/linux-x64/publish/ /data/ProtobufDumper
-COPY --from=dotnet /data/Decompiler /data/ValveResourceFormat/Decompiler/bin/Release/linux-x64/publish/ 
-COPY --from=download /data/VPKTool/vpktool /data/VPKTool/vpktool
-COPY --from=dotnet /data/DepotDownloader_export /data/DepotDownloader/DepotDownloader
+COPY --from=builder /data/DepotDownloader_export /data/DepotDownloader/DepotDownloader
+COPY --from=builder /data/GameTracking /data/GameTracking
 COPY list /data/list
 COPY --chmod=755 script.sh /data/
 
