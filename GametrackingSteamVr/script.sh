@@ -12,8 +12,7 @@ git config --global core.excludesfile ~/.gitignore && \
 
 cd /data/GameTracking
 
-git clone --branch $GITHUB_REF_NAME --single-branch https://$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git steamvr
-# git remote set-url origin https://[APPLICATION]:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git
+git clone --branch $GITHUB_REF_NAME --single-branch https://$GITHUB_APP_ID:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git steamvr
 
 cd steamvr
 
