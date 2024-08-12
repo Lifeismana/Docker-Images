@@ -10,6 +10,8 @@ set -eu
 echo ".DepotDownloader" >> ~/.gitignore && \
 git config --global core.excludesfile ~/.gitignore && \
 
+[ ! -d ~/ValveProtobufs ] && ln -s /data/ValveProtobufs ~/ValveProtobufs
+
 cd /data/GameTracking
 
 git clone --branch $GITHUB_REF_NAME --single-branch https://$GITHUB_APP_ID:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git steamvr
