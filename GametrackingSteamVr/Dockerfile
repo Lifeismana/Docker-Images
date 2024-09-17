@@ -21,7 +21,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     sed -i 's/git submodule update --remote --merge/git submodule update --remote --depth 1/' build.sh && \
     ./build.sh && \
     cd /data && \
-    git clone --depth=1 https://github.com/SteamRE/DepotDownloader.git && \
+    git clone --depth=1 https://github.com/Lifeismana/DepotDownloader.git && \
     cd DepotDownloader && \
     dotnet build -c Release ./DepotDownloader/DepotDownloader.csproj && \
     dotnet publish --configuration Release -p:PublishSingleFile=true -p:DebugType=embedded --self-contained --runtime linux-x64 DepotDownloader/DepotDownloader.csproj && \
