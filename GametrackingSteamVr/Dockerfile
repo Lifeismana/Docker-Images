@@ -18,8 +18,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     cd /data && \
     git clone --depth=1 --recurse-submodules https://github.com/SteamDatabase/GameTracking.git && \
     cd GameTracking && \
-    sed -i 's/git submodule update --remote --merge/git submodule update --remote --depth 1/' build.sh && \
-    ./build.sh && \
+    sed -i 's/git submodule update --remote --merge/git submodule update --remote --depth 1/' tools/build.sh && \
+    ./tools/build.sh && \
     cd /data && \
     git clone --depth=1 https://github.com/Lifeismana/DepotDownloader.git && \
     cd DepotDownloader && \
