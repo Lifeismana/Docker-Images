@@ -8,6 +8,7 @@ RUN echo '\nAcquire::Retries "100";\nAcquire::https::Timeout "240";\nAcquire::ht
 FROM base AS builder
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     build-essential \
+    cmake \
     wget \
     golang-go && \
     wget https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
@@ -18,7 +19,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     cd /data && \
     git clone --depth=1 --recurse-submodules https://github.com/SteamDatabase/GameTracking.git && \
     cd GameTracking && \
-    sed -i 's/git submodule update --remote --merge/git submodule update --remote --depth 1/' tools/build.sh && \
+    sed -i 's/git submodule update --remote --merge/git submodule update --init --remote --depth 1/' tools/build.sh && \
+    sed -i 's/^git submodule update #/git submodule update --init #/' tools/build.sh && \
     ./tools/build.sh && \
     cd /data && \
     git clone --depth=1 https://github.com/Lifeismana/DepotDownloader.git && \
