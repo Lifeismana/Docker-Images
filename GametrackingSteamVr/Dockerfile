@@ -14,7 +14,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     wget https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
     dpkg -i packages-microsoft-prod.deb && \
     apt-get update && \
-    apt-get install -y dotnet-sdk-8.0 && \
+    apt-get install -y dotnet-sdk-8.0 \
+    dotnet-sdk-9.0 && \
     mkdir /data && \
     cd /data && \
     git clone --depth=1 --recurse-submodules https://github.com/SteamDatabase/GameTracking.git && \
@@ -27,7 +28,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     cd DepotDownloader && \
     dotnet build -c Release ./DepotDownloader/DepotDownloader.csproj && \
     dotnet publish --configuration Release -p:PublishSingleFile=true -p:DebugType=embedded --self-contained --runtime linux-x64 DepotDownloader/DepotDownloader.csproj && \
-    mv ./DepotDownloader/bin/Release/net8.0/linux-x64/publish/DepotDownloader /data/DepotDownloader_export
+    mv ./DepotDownloader/bin/Release/net9.0/linux-x64/publish/DepotDownloader /data/DepotDownloader_export
 
 FROM base AS main
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
