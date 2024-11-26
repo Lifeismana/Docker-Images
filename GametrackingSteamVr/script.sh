@@ -20,7 +20,8 @@ cd steamvr
 
 mkdir -p ./manifests
 
-/data/DepotDownloader/DepotDownloader -username "$STEAM_USERNAME" -password "$STEAM_PASSWORD" -app 250820 -all-platforms -dir ./manifests -beta beta -manifest-only
+# 817940
+/data/DepotDownloader/DepotDownloader -username "$STEAM_USERNAME" -password "$STEAM_PASSWORD" -app 250820 -depot 228985 228988 228989 228990 250821 250822 250823 250824 250825 250827 250828 250829 250830 250831 250832 250833 250834 -all-platforms -dir ./manifests -beta beta -manifest-only
 shopt -s extglob
 for file in ./manifests/*_*_*.txt; do
     mv $file ${file%_+([0-9]).txt}.txt
