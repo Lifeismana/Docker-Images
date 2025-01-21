@@ -20,18 +20,20 @@ cd steamvr
 
 mkdir -p ./manifests
 
+[ -z "$STEAM_BRANCH" ] && STEAM_BRANCH="beta"
+
 # 817940
-/data/DepotDownloader/DepotDownloader -username "$STEAM_USERNAME" -password "$STEAM_PASSWORD" -app 250820 -depot 228985 228988 228989 228990 250821 250822 250823 250824 250825 250827 250828 250829 250830 250831 250832 250833 250834 -all-platforms -dir ./manifests -beta beta -manifest-only
+/data/DepotDownloader/DepotDownloader -username "$STEAM_USERNAME" -password "$STEAM_PASSWORD" -app 250820 -depot 228985 228988 228989 228990 250821 250822 250823 250824 250825 250827 250828 250829 250830 250831 250832 250833 250834 -all-platforms -dir ./manifests -beta $STEAM_BRANCH -manifest-only
 shopt -s extglob
 for file in ./manifests/*_*_*.txt; do
     mv $file ${file%_+([0-9]).txt}.txt
 done
-/data/DepotDownloader/DepotDownloader -username "$STEAM_USERNAME" -password "$STEAM_PASSWORD" -app 250820 -all-platforms -depot 250821 -validate -dir . -beta beta -filelist "/data/list/dll.txt"
-/data/DepotDownloader/DepotDownloader -username "$STEAM_USERNAME" -password "$STEAM_PASSWORD" -app 250820 -all-platforms -depot 250823 250832 -validate -dir . -beta beta -filelist "/data/list/lib.txt"
-/data/DepotDownloader/DepotDownloader -username "$STEAM_USERNAME" -password "$STEAM_PASSWORD" -app 250820 -all-platforms -depot 250824 -validate -dir . -beta beta -filelist "/data/list/big_content.txt"
-/data/DepotDownloader/DepotDownloader -username "$STEAM_USERNAME" -password "$STEAM_PASSWORD" -app 250820 -all-platforms -depot 250827 250830 250833 -validate -dir . -beta beta -filelist "/data/list/content.txt"
-/data/DepotDownloader/DepotDownloader -username "$STEAM_USERNAME" -password "$STEAM_PASSWORD" -app 250820 -all-platforms -depot 250834 -validate -dir . -beta beta 
-/data/DepotDownloader/DepotDownloader -app 250820 -all-platforms -depot 250825 -dir . -beta beta
+/data/DepotDownloader/DepotDownloader -username "$STEAM_USERNAME" -password "$STEAM_PASSWORD" -app 250820 -all-platforms -depot 250821 -validate -dir . -beta $STEAM_BRANCH -filelist "/data/list/dll.txt"
+/data/DepotDownloader/DepotDownloader -username "$STEAM_USERNAME" -password "$STEAM_PASSWORD" -app 250820 -all-platforms -depot 250823 250832 -validate -dir . -beta $STEAM_BRANCH -filelist "/data/list/lib.txt"
+/data/DepotDownloader/DepotDownloader -username "$STEAM_USERNAME" -password "$STEAM_PASSWORD" -app 250820 -all-platforms -depot 250824 -validate -dir . -beta $STEAM_BRANCH -filelist "/data/list/big_content.txt"
+/data/DepotDownloader/DepotDownloader -username "$STEAM_USERNAME" -password "$STEAM_PASSWORD" -app 250820 -all-platforms -depot 250827 250830 250833 -validate -dir . -beta $STEAM_BRANCH -filelist "/data/list/content.txt"
+/data/DepotDownloader/DepotDownloader -username "$STEAM_USERNAME" -password "$STEAM_PASSWORD" -app 250820 -all-platforms -depot 250834 -validate -dir . -beta $STEAM_BRANCH 
+/data/DepotDownloader/DepotDownloader -app 250820 -all-platforms -depot 250825 -dir . -beta $STEAM_BRANCH
 npm install
 
 ./update.sh
