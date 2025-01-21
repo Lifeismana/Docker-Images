@@ -9,7 +9,7 @@ on:
   schedule:
     - cron: '0 5 * * 1'
   push:
-    branches: [ "master" ]
+    branches: [ "master", "experimental" ]
     # Publish semver tags as releases.
     paths:
       - '.github/workflows/docker-build-gametrackingsteamvr.yml'
@@ -69,6 +69,6 @@ jobs:
         with:
           context: "{{defaultContext}}:GametrackingSteamVr"
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ env.GHCR_SLUG }}:latest
-          cache-from: ${{ env.GHCR_SLUG }}:latest
+          tags: ${{ env.GHCR_SLUG }}:experimental
+          cache-from: ${{ env.GHCR_SLUG }}:experimental
           labels: ${{ steps.meta.outputs.labels }}
