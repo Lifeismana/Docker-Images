@@ -18,7 +18,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     dotnet-sdk-9.0 && \
     mkdir /data && \
     cd /data && \
-    git clone --depth=1 --recurse-submodules https://github.com/Lifeismana/GameTracking.git && \
+    git clone --depth=1 --recurse-submodules https://github.com/SteamDatabase/GameTracking.git && \
     cd GameTracking && \
     sed -i 's/git submodule update --remote --merge/git submodule update --init --remote --depth 1/' tools/build.sh && \
     sed -i 's/^git submodule update #/git submodule update --init #/' tools/build.sh && \
