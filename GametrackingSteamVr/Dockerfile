@@ -39,6 +39,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     php-common \
     php-mbstring \
     openssh-client \
+    rsync \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /data/DepotDownloader_export /data/DepotDownloader/DepotDownloader
