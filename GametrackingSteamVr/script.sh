@@ -36,4 +36,4 @@ done
 /data/DepotDownloader/DepotDownloader -app 250820 -all-platforms -depot 250825 -dir . -beta $STEAM_BRANCH
 npm install
 
-./update.sh
+./update.sh $STEAM_BRANCH
