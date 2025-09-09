@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS dotnet
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS dotnet
 RUN mkdir /data && \
     cd /data && \
     git clone --depth=1 https://github.com/xPaw/SteamWebPipes.git && \
