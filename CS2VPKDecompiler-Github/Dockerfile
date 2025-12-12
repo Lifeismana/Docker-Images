@@ -5,7 +5,7 @@ RUN echo '\nAcquire::Retries "100";\nAcquire::https::Timeout "240";\nAcquire::ht
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS dotnet
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS dotnet
 ARG BUILDARCH
 # https://stackoverflow.com/questions/70369368/check-architecture-in-dockerfile-to-get-amd-arm
 RUN echo "BUILDARCH: $BUILDARCH" && \
