@@ -40,6 +40,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     php-mbstring \
     openssh-client \
     rsync \
+    libicu-dev \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /data/DepotDownloader_export /data/DepotDownloader/DepotDownloader
